@@ -3,7 +3,7 @@ const result = document.querySelector('.result')
 const fetchData = async () => {
 
   try{
-    const {data} = await axios.get('/api/basic-api')
+    const {data} = await axios.get('https://jm-serverless.netlify.app/api/basic-api')
     const products = data.map((prod) => {
       const {image:{url}, name, price} = prod
       return `
@@ -22,6 +22,7 @@ const fetchData = async () => {
 
   }catch(error){
     console.log(error.response)
+    result.innerHTML = 'API Error'
   }
 
 
