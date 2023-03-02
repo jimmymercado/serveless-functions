@@ -42,6 +42,7 @@ result.addEventListener('click', async function(e){
 
     const votes = voteNode.dataset.votes
     const newVotes = await modifyData(id, votes)
+    title.innerHTML = 'Survey'
     if(newVotes){
       voteNode.textContent = `${newVotes} votes`
       voteNode.dataset.votes = newVotes
@@ -60,7 +61,7 @@ async function modifyData(id, votes) {
     console.log(error.response)
     return null
   }
-  title.innerHTML = 'Survey'
+  
 
   
 
