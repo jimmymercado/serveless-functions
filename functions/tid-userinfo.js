@@ -15,6 +15,7 @@ exports.handler = async (event, context, callback) => {
 	//const redirect_uri = 'https://forms.trimble.com/geospatial/tbc-trial/tid.html';
 	//const redirect_uri = 'https://preview-geospatialtrimbleproduction.gatsbyjs.io/en/products/software/trimble-business-center/trial-download-jm';
 	const redirect_uri = 'https://jm-serverless.netlify.app/api/tid-userinfo'
+  //const redirect_uri = 'http://localhost:8888/api/tid-userinfo'
 	const salt = getRandomString(64);
 	let tid_loaded = false;
   let access_token = null;
