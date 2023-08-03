@@ -11,7 +11,8 @@ exports.handler = async (event, context, callback) => {
 	const client_secret = 'ebe16f58573f4342b7e218acdbb0d5b3';
 	//const redirect_uri = 'https://forms.trimble.com/geospatial/tbc-trial/tid.html';
 	//const redirect_uri = 'https://preview-geospatialtrimbleproduction.gatsbyjs.io/en/products/software/trimble-business-center/trial-download';
-	const redirect_uri = 'http://localhost:8001/en/products/software/trimble-business-center/trial-download';
+	//const redirect_uri = 'http://localhost:8001/en/products/software/trimble-business-center/trial-download';
+  const redirect_uri = 'http://localhost:8888/api/tid-login'
 	const salt = getRandomString(64);
 	let tid_loaded = false;
   let access_token = null;
@@ -64,13 +65,15 @@ exports.handler = async (event, context, callback) => {
 	}
 
 
-  const result = getToken(code).then((data) => {
-    return 'JSON.stringify(data)'
+  const res = await getToken(code).then((data) => {
+    console.log('data')
+    console.log(JSON.stringify(data))
+    return JSON.stringify(data)
   })
 
   return {
     headers:{'Access-Control-Allow-Origin': '*'},    
     statusCode:200,
-    body: result
+    body: res
   }
 }
