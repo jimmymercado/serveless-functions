@@ -119,6 +119,7 @@ exports.handler = async (event, context, callback) => {
         })
         
       })
+      
       console.log('user_info', user_info)
       
       return{
