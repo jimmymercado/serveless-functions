@@ -131,7 +131,7 @@ exports.handler = async (event, context, callback) => {
       return{
         headers:{'Access-Control-Allow-Origin': '*'},
         statusCode: 500,
-        body: '{"error: "TID API Error"}'
+        body: '{"error: "TID API Error", "errorMessage" : error}'
       }
     }
   }
