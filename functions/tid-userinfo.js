@@ -57,7 +57,7 @@ exports.handler = async (event, context, callback) => {
 		};
 		
 		const response = await fetch(api_host + api_token, requestOptions);		
-		return response.json();
+		return await response.json();
 		
 	}
 
