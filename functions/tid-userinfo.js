@@ -13,8 +13,8 @@ exports.handler = async (event, context, callback) => {
 	const client_id = process.env["TID_" + process.env.APP_ENV.toUpperCase() + "_CLIENT_ID"] //'48143bb4-2d81-4d09-899c-0992f82e9565';
 	const client_secret = process.env["TID_" + process.env.APP_ENV.toUpperCase() + "_CLIENT_SECRET"] //'ebe16f58573f4342b7e218acdbb0d5b3';
 	//const redirect_uri = 'https://forms.trimble.com/geospatial/tbc-trial/tid.html';
-	//const redirect_uri = 'https://preview-geospatialtrimbleproduction.gatsbyjs.io/en/products/software/trimble-business-center/trial-download-jm';
-	const redirect_uri = 'https://jm-serverless.netlify.app/api/tid-userinfo'
+	const redirect_uri = 'https://preview-geospatialtrimbleproduction.gatsbyjs.io/en/products/software/trimble-business-center/trial-download-jm';
+	//const redirect_uri = 'https://jm-serverless.netlify.app/api/tid-userinfo'
   //const redirect_uri = 'http://localhost:8888/api/tid-userinfo'
 	const salt = getRandomString(64);
 	let tid_loaded = false;
@@ -97,35 +97,40 @@ exports.handler = async (event, context, callback) => {
 
   if(code){
     try{
-      user_info = await getToken(code).then((data) => {
-        if(data?.error){
-          return{
-            headers:{'Access-Control-Allow-Origin': '*'},
-            statusCode: 500,
-            body: `TID Error: ${data?.error}`
-          }
+      const tid_token = await getToken(code)
+      console.log('tid_token', tid_token)
+      
+      if(tid_token?.error){
+        return{
+          headers:{'Access-Control-Allow-Origin': '*'},
+          statusCode: 500,
+          body: `getToken Error: ${JSON.stringify(tid_token)}`
         }
-        return data?.access_token || null      
-      }).then(token => {
-        return getUserInfo(token).then((data) => {
-          if(data?.error){
-            return{
-              headers:{'Access-Control-Allow-Origin': '*'},
-              statusCode: 500,
-              body: `TID Error: ${JSON.stringify(data)}`
-            }
-          }
-          return data
-        })
-        
-      })
-      
-      console.log('user_info', user_info)
-      
-      return{
+      }      
+
+      const tid_user_info = await getUserInfo(tid_token.access_token)
+      console.log('tid_user_info', tid_user_info)
+
+      // .then((data) => {
+      //   console.log('getToken data', data)
+      //   if(data?.error){
+      //     return{
+      //       headers:{'Access-Control-Allow-Origin': '*'},
+      //       statusCode: 500,
+      //       body: `getToken Error: ${data?.error}`
+      //     }
+
+      //   }
+      //   return {
+      //     headers:{'Access-Control-Allow-Origin': '*'},
+      //     statusCode: 200,
+      //     body: JSON.stringify(data)
+      //   }
+      // })
+      return {
         headers:{'Access-Control-Allow-Origin': '*'},
         statusCode: 200,
-        body: JSON.stringify(user_info)
+        body: JSON.stringify(tid_user_info)
       }
     }catch(error){
       return{
@@ -134,6 +139,31 @@ exports.handler = async (event, context, callback) => {
         body: '{"error: "TID API Error", "errorMessage" : error}'
       }
     }
+      //console.log('tid_user_info', tid_user_info)
+
+      // .then(token => {
+      //   console.log('token', token)
+      //   return getUserInfo(token).then((data) => {
+      //     console.log('getUserInfo - data', data)
+      //     if(data?.error){
+      //       console.log('getUserInfo - data - error', data)
+      //       return{
+      //         headers:{'Access-Control-Allow-Origin': '*'},
+      //         statusCode: 500,
+      //         body: `getUserInfo Error: ${JSON.stringify(data)}`
+      //       }
+      //     } else {
+      //       return data
+      //     }
+          
+      //   })
+        
+      // })      
+
+      
+      
+      
+   
   }
   return {
     headers:{'Access-Control-Allow-Origin': '*'},
