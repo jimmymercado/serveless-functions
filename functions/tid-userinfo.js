@@ -1,22 +1,20 @@
-
 const dotenv = require("dotenv")
 dotenv.config()
 
   
 exports.handler = async (event, context, callback) => {
 
-  const {code} = event.queryStringParameters
+  const {code, redirectUri} = event.queryStringParameters
   const host = process.env.APP_ENV
-	//const api_host = host==='geospatial.trimble.com' ? 'https://id.trimblecloud.com' : 'https://stage.id.trimblecloud.com';
-	const api_host = 'https://stage.id.trimblecloud.com';
+	const api_host = host==='geospatial.trimble.com' ? 'https://id.trimblecloud.com' : 'https://stage.id.trimblecloud.com';
 	const api_token = '/oauth/token';
 	const api_info = '/oauth/userinfo';
 	const client_id = process.env["TID_" + process.env.APP_ENV.toUpperCase() + "_CLIENT_ID"] //'48143bb4-2d81-4d09-899c-0992f82e9565';
 	const client_secret = process.env["TID_" + process.env.APP_ENV.toUpperCase() + "_CLIENT_SECRET"] //'ebe16f58573f4342b7e218acdbb0d5b3';
 
-	const redirect_uri = 'https://preview-geospatialtrimbleproduction.gatsbyjs.io/en/products/software/trimble-business-center/trial-download-jm';
+	// const redirect_uri = 'https://preview-geospatialtrimbleproduction.gatsbyjs.io/en/products/software/trimble-business-center/trial-download-jm';
 	//const redirect_uri = 'https://jm-serverless.netlify.app/api/tid-userinfo'
-  // const redirect_uri = 'http://localhost:8888/api/tid-userinfo'
+  const redirect_uri = redirectUri || 'http://localhost:8888/api/tid-userinfo'
 	const salt = getRandomString(64);
 	let tid_loaded = false;
   let access_token = null;
@@ -94,7 +92,6 @@ exports.handler = async (event, context, callback) => {
 		const response = await fetch(api_host + api_info, requestOptions);
 		return response.json()
 	}
-
   
   function getRandomString(length) {
 		 var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -105,7 +102,6 @@ exports.handler = async (event, context, callback) => {
 		 }
 		 return result;
 	}
-
 
   if(code){
     try {
