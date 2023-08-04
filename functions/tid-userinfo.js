@@ -96,7 +96,7 @@ exports.handler = async (event, context, callback) => {
 
 
   if(code){
-    try{
+    try {
       const tid_token = await getToken(code)
       console.log('tid_token', tid_token)
       
@@ -132,11 +132,11 @@ exports.handler = async (event, context, callback) => {
         statusCode: 200,
         body: JSON.stringify(tid_user_info)
       }
-    }catch(error){
+    } catch (err){
       return{
         headers:{'Access-Control-Allow-Origin': '*'},
         statusCode: 500,
-        body: '{"error: "TID API Error", "errorMessage" : error}'
+        body: `{"error: "TID API Error", "errorMessage" : ${err}}`
       }
     }
       //console.log('tid_user_info', tid_user_info)
