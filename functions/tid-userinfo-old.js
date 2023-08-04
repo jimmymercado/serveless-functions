@@ -1,4 +1,4 @@
-
+const fetch = require('node-fetch')
 const dotenv = require("dotenv")
 dotenv.config()
 
@@ -13,10 +13,10 @@ exports.handler = async (event, context, callback) => {
 	const api_info = '/oauth/userinfo';
 	const client_id = process.env["TID_" + process.env.APP_ENV.toUpperCase() + "_CLIENT_ID"] //'48143bb4-2d81-4d09-899c-0992f82e9565';
 	const client_secret = process.env["TID_" + process.env.APP_ENV.toUpperCase() + "_CLIENT_SECRET"] //'ebe16f58573f4342b7e218acdbb0d5b3';
-
+	//const redirect_uri = 'https://forms.trimble.com/geospatial/tbc-trial/tid.html';
 	const redirect_uri = 'https://preview-geospatialtrimbleproduction.gatsbyjs.io/en/products/software/trimble-business-center/trial-download-jm';
 	//const redirect_uri = 'https://jm-serverless.netlify.app/api/tid-userinfo'
-  // const redirect_uri = 'http://localhost:8888/api/tid-userinfo'
+  //const redirect_uri = 'http://localhost:8888/api/tid-userinfo'
 	const salt = getRandomString(64);
 	let tid_loaded = false;
   let access_token = null;
@@ -37,16 +37,10 @@ exports.handler = async (event, context, callback) => {
 
 		const authBase64 = btoa(client_id + ':' + client_secret);
 		
-		// const requestHead = new Headers()
-		// requestHead.append('Content-Type', 'application/x-www-form-urlencoded');
-		// requestHead.append('Authorization', 'Basic ' + authBase64);
-		// requestHead.append('Accept', 'application/json');
-
-    const requestHeaders = {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': 'Basic ' + authBase64,
-      'Accept': 'application/json'
-    }
+		const requestHead = new fetch.Headers()
+		requestHead.append('Content-Type', 'application/x-www-form-urlencoded');
+		requestHead.append('Authorization', 'Basic ' + authBase64);
+		requestHead.append('Accept', 'application/json');
 		
 		const requestBody = new URLSearchParams()
 		requestBody.append('grant_type', 'authorization_code');
@@ -58,7 +52,7 @@ exports.handler = async (event, context, callback) => {
 		
 		let requestOptions = {
 			method: 'POST',
-			headers: requestHeaders,
+			headers: requestHead,
 			body: requestBody,
 			redirect: 'follow',
 		};
@@ -76,18 +70,13 @@ exports.handler = async (event, context, callback) => {
     // Authorization: Bearer <access_token>
     // Accept: application/json
 		
-		// const requestHead = new fetch.Headers()
-		// requestHead.append('Authorization', 'Bearer ' + token);
-		// requestHead.append('Accept', 'application/json');
+		const requestHead = new fetch.Headers()
+		requestHead.append('Authorization', 'Bearer ' + token);
+		requestHead.append('Accept', 'application/json');
 		
-    const requestHeaders = {
-      'Authorization': 'Bearer ' + token,
-      'Accept': 'application/json'
-    }
-
 		let requestOptions = {
 			method: 'GET',
-			headers: requestHeaders,
+			headers: requestHead,
 			redirect: 'follow',
 		};
 		
@@ -123,6 +112,22 @@ exports.handler = async (event, context, callback) => {
       const tid_user_info = await getUserInfo(tid_token.access_token)
       console.log('tid_user_info', tid_user_info)
 
+      // .then((data) => {
+      //   console.log('getToken data', data)
+      //   if(data?.error){
+      //     return{
+      //       headers:{'Access-Control-Allow-Origin': '*'},
+      //       statusCode: 500,
+      //       body: `getToken Error: ${data?.error}`
+      //     }
+
+      //   }
+      //   return {
+      //     headers:{'Access-Control-Allow-Origin': '*'},
+      //     statusCode: 200,
+      //     body: JSON.stringify(data)
+      //   }
+      // })
       return {
         headers:{'Access-Control-Allow-Origin': '*'},
         statusCode: 200,
@@ -134,7 +139,30 @@ exports.handler = async (event, context, callback) => {
         statusCode: 500,
         body: `{"error: "TID API Error", "errorMessage" : ${err}}`
       }
-    }      
+    }
+      //console.log('tid_user_info', tid_user_info)
+
+      // .then(token => {
+      //   console.log('token', token)
+      //   return getUserInfo(token).then((data) => {
+      //     console.log('getUserInfo - data', data)
+      //     if(data?.error){
+      //       console.log('getUserInfo - data - error', data)
+      //       return{
+      //         headers:{'Access-Control-Allow-Origin': '*'},
+      //         statusCode: 500,
+      //         body: `getUserInfo Error: ${JSON.stringify(data)}`
+      //       }
+      //     } else {
+      //       return data
+      //     }
+          
+      //   })
+        
+      // })      
+
+      
+      
       
    
   }
@@ -143,5 +171,15 @@ exports.handler = async (event, context, callback) => {
     statusCode: 500,
     body: '{"error: "TID Unauthorized Access"}'
   }
+
+
+
+
+
+
+
+
+
+
   
 }
