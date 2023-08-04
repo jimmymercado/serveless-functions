@@ -1,3 +1,4 @@
+const fetch = require('node-fetch')
 const dotenv = require("dotenv")
 dotenv.config()
 
@@ -36,7 +37,7 @@ exports.handler = async (event, context, callback) => {
 
 		const authBase64 = btoa(client_id + ':' + client_secret);
 		
-		const requestHead = new Headers()
+		const requestHead = new fetch.Headers()
 		requestHead.append('Content-Type', 'application/x-www-form-urlencoded');
 		requestHead.append('Authorization', 'Basic ' + authBase64);
 		requestHead.append('Accept', 'application/json');
@@ -69,7 +70,7 @@ exports.handler = async (event, context, callback) => {
     // Authorization: Bearer <access_token>
     // Accept: application/json
 		
-		const requestHead = new Headers()
+		const requestHead = new fetch.Headers()
 		requestHead.append('Authorization', 'Bearer ' + token);
 		requestHead.append('Accept', 'application/json');
 		
