@@ -13,8 +13,8 @@ exports.handler = async (event, context, callback) => {
 	const client_id = process.env["TID_" + process.env.APP_ENV.toUpperCase() + "_CLIENT_ID"] //'48143bb4-2d81-4d09-899c-0992f82e9565';
 	const client_secret = process.env["TID_" + process.env.APP_ENV.toUpperCase() + "_CLIENT_SECRET"] //'ebe16f58573f4342b7e218acdbb0d5b3';
 	//const redirect_uri = 'https://forms.trimble.com/geospatial/tbc-trial/tid.html';
-	const redirect_uri = 'https://preview-geospatialtrimbleproduction.gatsbyjs.io/en/products/software/trimble-business-center/trial-download-jm';
-	//const redirect_uri = 'https://jm-serverless.netlify.app/api/tid-userinfo'
+	// const redirect_uri = 'https://preview-geospatialtrimbleproduction.gatsbyjs.io/en/products/software/trimble-business-center/trial-download-jm';
+	const redirect_uri = 'https://jm-serverless.netlify.app/api/tid-userinfo'
   //const redirect_uri = 'http://localhost:8888/api/tid-userinfo'
 	const salt = getRandomString(64);
 	let tid_loaded = false;
