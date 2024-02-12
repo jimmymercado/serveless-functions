@@ -12,4 +12,4 @@
   to = "/my-examples/1-hello/"
   status = 302
   force = false
-  query = {newCode = ":code", newState = ":state"}
+  query = {code = ":code", state = ":state"}
