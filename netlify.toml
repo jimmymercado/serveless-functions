@@ -5,3 +5,11 @@
   from = '/api/*'
   to = '/.netlify/functions/:splat'
   status = 200
+
+
+  [[redirects]]
+  from = "/redirecting"
+  to = "/my-examples/1-hello/"
+  status = 302
+  force = false
+  query = {newCode = ":code", newState = ":state"}
